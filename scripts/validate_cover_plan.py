@@ -26,16 +26,21 @@ INPUT_FIELDS = (
     "明确不采用的参考元素",
 )
 SCHEME_FIELDS = (
+    "视觉家族",
     "结构类型",
     "封面短句",
     "一眼先看见",
     "人物",
+    "人物动词",
     "证据物",
+    "人与证据关系",
     "构图",
+    "镜头",
     "品牌元素",
     "色彩",
     "制作说明",
     "动效转静态说明",
+    "三段阅读顺序",
     "风险",
 )
 EXECUTION_FIELDS = (
@@ -46,6 +51,8 @@ EXECUTION_FIELDS = (
     "证据物占比与锚点",
     "品牌角标",
     "字级关系",
+    "缩略图阅读顺序",
+    "人物—证据连接方式",
     "合成层级",
     "需要补拍或补生成的素材",
     "参考图绑定",
@@ -55,6 +62,11 @@ EXECUTION_FIELDS = (
     "生图底图提示词",
     "后期排版说明",
     "最终输出",
+)
+
+VISUAL_FAMILIES = ("标准解释型", "自然帧型", "专题海报型", "人物纪实型")
+CAMERA_LANGUAGE_RE = re.compile(
+    r"(?:\d{2,3}\s*mm|广角|中焦|长焦|低机位|高机位|平视|俯拍|仰拍|景深|透视)"
 )
 
 
@@ -99,6 +111,19 @@ def validate(text: str) -> list[str]:
         for name in SCHEME_FIELDS:
             if missing_or_placeholder(fields.get(name, "")):
                 errors.append(f"方案 {label} 缺少有效字段：{name}")
+        visual_family = fields.get("视觉家族", "")
+        if visual_family and not any(name in visual_family for name in VISUAL_FAMILIES):
+            errors.append(
+                f"方案 {label} 的视觉家族必须包含：{'／'.join(VISUAL_FAMILIES)} 之一"
+            )
+        camera = fields.get("镜头", "")
+        if camera and not CAMERA_LANGUAGE_RE.search(camera):
+            errors.append(
+                f"方案 {label} 的镜头字段需要写明焦段感、机位、景深或透视"
+            )
+        reading_order = fields.get("三段阅读顺序", "")
+        if reading_order and "→" not in reading_order:
+            errors.append(f"方案 {label} 的三段阅读顺序应使用「→」标明先后")
         title = fields.get("封面短句", "")
         han_count = len(re.findall(r"[\u3400-\u9fff]", title))
         if title and not 8 <= han_count <= 18:
@@ -126,16 +151,21 @@ def validate(text: str) -> list[str]:
 def self_test() -> int:
     valid_fields = "\n".join(
         [
+            "- 视觉家族：标准解释型",
             "- 结构类型：实测拆解型",
             "- 封面短句：机器人真的会取代工人吗",
             "- 一眼先看见：机器人夹爪",
             "- 人物：右侧半身，指向夹爪",
+            "- 人物动词：测量",
             "- 证据物：左侧唯一机器人夹爪",
+            "- 人与证据关系：手指接触夹爪刻度，视线落在测量点",
             "- 构图：左右对撞并保留上方标题区",
+            "- 镜头：35mm 平视中景，人物和夹爪保持同一景深",
             "- 品牌元素：像素猫角标",
             "- 色彩：深灰底与橙色强调",
             "- 制作说明：保持夹爪结构真实",
             "- 动效转静态说明：用视线形成阅读顺序",
+            "- 三段阅读顺序：命题→夹爪证据→人物测量动作",
             "- 风险：需要核验设备型号",
         ]
     )
