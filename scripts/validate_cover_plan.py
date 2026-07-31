@@ -19,7 +19,10 @@ INPUT_FIELDS = (
     "账号定位版本",
     "选题",
     "核心判断",
+    "封面承诺",
     "点击后可兑现的回答",
+    "开场兑现点",
+    "封面—开场连续性",
     "可见证据",
     "素材缺口",
     "采用的账号视觉指纹",
@@ -29,6 +32,8 @@ SCHEME_FIELDS = (
     "视觉家族",
     "结构类型",
     "封面短句",
+    "点击动机",
+    "承诺兑现路径",
     "一眼先看见",
     "人物",
     "人物动词",
@@ -53,6 +58,7 @@ EXECUTION_FIELDS = (
     "字级关系",
     "缩略图阅读顺序",
     "人物—证据连接方式",
+    "封面—开场衔接",
     "合成层级",
     "需要补拍或补生成的素材",
     "参考图绑定",
@@ -124,6 +130,9 @@ def validate(text: str) -> list[str]:
         reading_order = fields.get("三段阅读顺序", "")
         if reading_order and "→" not in reading_order:
             errors.append(f"方案 {label} 的三段阅读顺序应使用「→」标明先后")
+        promise_path = fields.get("承诺兑现路径", "")
+        if promise_path and "→" not in promise_path:
+            errors.append(f"方案 {label} 的承诺兑现路径应使用「→」标明先后")
         title = fields.get("封面短句", "")
         han_count = len(re.findall(r"[\u3400-\u9fff]", title))
         if title and not 8 <= han_count <= 18:
@@ -154,6 +163,8 @@ def self_test() -> int:
             "- 视觉家族：标准解释型",
             "- 结构类型：实测拆解型",
             "- 封面短句：机器人真的会取代工人吗",
+            "- 点击动机：低价机器人与真实劳动能力之间存在可验证的信息缺口",
+            "- 承诺兑现路径：机器人能否工作→开场出现夹爪测试→正文回答能力边界",
             "- 一眼先看见：机器人夹爪",
             "- 人物：右侧半身，指向夹爪",
             "- 人物动词：测量",
