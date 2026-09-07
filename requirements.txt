@@ -1,0 +1,2 @@
+# Only artifact image inspection requires Pillow; Markdown validation uses stdlib.
+Pillow>=10.0
