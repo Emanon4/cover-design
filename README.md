@@ -1,5 +1,13 @@
 # Cover Design · v2.0.0
 
+## 与 Meme 的关系
+
+Meme「多工序撰稿设计环节链」下属的短视频封面 Skill。它是 Meme 理论与内容生产方法的应用实践。母项目与总索引：[Emanon4/Meme](https://github.com/Emanon4/Meme)（私有，需访问权限）。
+
+所属撰稿子项目：[Emanon4/meme-script-workflow](https://github.com/Emanon4/meme-script-workflow)（私有）。
+
+本机维护源为 Meme 内的 `多工序撰稿设计环节链/工具/cover-design/`。日常在母项目维护，再按本目录范围同步独立仓库；独立仓库保留发布、安装及版本历史。实际采集数据、客户资料、密钥和登录态不在同步范围内。
+
 Meme「多工序撰稿设计环节链」旗下的短视频封面设计 Skill。根据脚本、真人和产品素材，设计标题与人物情境，选择主要证据关系，并检查实际输出。
 
 适用于科创大牛猫、蒸汽电波及其他内容账号。最高目标仍是「兑现型点击」：观众因正文能够满足的期待点开，开场及时确认这种期待。执行入口是 [SKILL.md](SKILL.md)。
